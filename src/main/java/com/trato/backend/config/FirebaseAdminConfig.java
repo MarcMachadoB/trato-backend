@@ -1,0 +1,34 @@
+package com.trato.backend.config;
+
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+
+@Configuration
+public class FirebaseAdminConfig {
+
+    @Bean(destroyMethod = "delete")
+    @Lazy
+    FirebaseApp firebaseApp(@Value("${firebase.project-id:}") String projectId) throws IOException {
+        FirebaseOptions.Builder options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.getApplicationDefault());
+
+        if (!projectId.isBlank()) {
+            options.setProjectId(projectId);
+        }
+
+        return FirebaseApp.initializeApp(options.build(), "trato-backend");
+    }
+
+    @Bean
+    @Lazy
+    FirebaseAuth firebaseAuth(FirebaseApp firebaseApp) {
+        return FirebaseAuth.getInstance(firebaseApp);
+    }
+}

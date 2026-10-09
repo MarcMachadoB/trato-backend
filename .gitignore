@@ -1,0 +1,8 @@
+target/
+.idea/
+*.iml
+
+# Firebase credentials must stay outside version control.
+*firebase-admin*.json
+*service-account*.json
+serviceAccount*.json
